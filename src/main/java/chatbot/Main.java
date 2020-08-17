@@ -11,9 +11,7 @@ public class Main {
 
 	public static void main(String[] args) throws LoginException {
 		
-		new bot("NzMwMTA3MTc5MzUyMTk1MTM0.XwSrTA.ZFUy1UN4-vZqHdoeKpM9PRtyYME", 
-				Activity.watching("Eroge"), 
-				OnlineStatus.DO_NOT_DISTURB);
+		new bot("Your token here", Activity.playing("activity"), OnlineStatus.DO_NOT_DISTURB);
 	}
 
 	static class bot {
