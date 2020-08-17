@@ -16,11 +16,9 @@ public class Events extends ListenerAdapter{
 		//Andrej Karpathy: i literally have no idea 
 
 		String command = msg.getContentRaw().split(" ")[0].substring(Main.prefix.length());
-		System.out.println(command);
 		
-		if (Main.commands.containsKey(command)) {
+		if (Main.commands.containsKey(command)) 
 			Main.commands.get(command).execute(event, msg.getContentRaw().split(" "));
-		}
 		
 	}
 
