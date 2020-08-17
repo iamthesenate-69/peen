@@ -29,7 +29,6 @@ public class Main {
 			prefix = _prefix;
 			commands = new HashMap<String, Execute>();
 			commands.put("sans", new Sans());
-			commands.put("dm", new Dm());
 			
 			JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
 			.addEventListeners(new Events())
