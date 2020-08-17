@@ -50,7 +50,6 @@ public class Main {
 			commands.put("sans", new Sans());
 			commands.put("ban", new Ban());
 			commands.put("kick", new Kick());
-			commands.put("cbt", new CBT());
 			commands.put("megumin", new Megumin());
 
 			JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
