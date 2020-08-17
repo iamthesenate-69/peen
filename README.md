@@ -1,3 +1,3 @@
 # peen
-discord webhook
+discord bot
 yes
