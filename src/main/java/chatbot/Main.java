@@ -16,8 +16,13 @@ import chatbot.commands.Sans;
 public class Main {
 
 	public static void main(String[] args) throws LoginException {
-		//token, activity, onlinestatus, bot prefix
-		new Bot("Your Token Here", Activity.playing("activity"), OnlineStatus.DO_NOT_DISTURB, "~");
+		try {
+			//token, activity, onlinestatus, bot prefix
+			new Bot("Your Token Here", Activity.playing("activity"), OnlineStatus.DO_NOT_DISTURB, "~");
+		} catch(LoginException e) {
+			System.out.println("Provide a valid token!");
+			System.exit(1);
+		}
 	}
 	
 	public static HashMap<String, Execute> commands;
