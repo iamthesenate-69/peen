@@ -3,7 +3,7 @@ discord bot
 
 yes
 
-replace "Your token here" in Main.java with your bot token
+replace "Your Token Here" in Main.java with your bot token
 
 
 
