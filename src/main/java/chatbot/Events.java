@@ -1,37 +1,27 @@
 package chatbot;
 
-import java.util.Random;
-
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Events extends ListenerAdapter{
 
 	public void onMessageReceived(MessageReceivedEvent event) {
-		String msg = event.getMessage().getContentRaw();
-		TextChannel channel = event.getMessage().getTextChannel();
+		Message msg = event.getMessage();
 
-		if (msg.equalsIgnoreCase("sans")) {
-//			int rand = randomNum(0, 6);
-			String[] Titles = {"Sans Undertale"};
-			String[] Urls = {"https://upload.wikimedia.org/wikipedia/en/0/01/Sans_undertale.jpg"};
-			channel.sendMessage(embed(Titles, Urls).build()).queue();
-		}
+		if (msg.getAuthor().isBot() || !msg.getContentRaw().startsWith(Main.prefix)) 
+			return;
+		
+		//Alright stop, this is too much, this is a complete clusterfuck, how did this get so out of control
+		//Andrej Karpathy: i literally have no idea 
 
-		else if (msg.equals("zero two")) {
-
+		String command = msg.getContentRaw().split(" ")[0].substring(Main.prefix.length());
+		System.out.println(command);
+		
+		if (Main.commands.containsKey(command)) {
+			Main.commands.get(command).execute(event, msg.getContentRaw().split(" "));
 		}
 		
-		else if (msg.equals("zero two")) {
-
-		}
-	}
-	
-	//random number from a to b
-	int randomNum(int a, int b) {
-		return new Random().nextInt(b - a) + a;
 	}
 
 }
