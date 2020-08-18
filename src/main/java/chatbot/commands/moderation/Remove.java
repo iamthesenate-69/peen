@@ -3,8 +3,8 @@ package chatbot.commands.moderation;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import chatbot.commands.Command;
-import chatbot.commands.Functions;
+import chatbot.commands.util.Command;
+import chatbot.commands.util.Functions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
