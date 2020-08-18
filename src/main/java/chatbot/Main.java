@@ -12,15 +12,14 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import chatbot.commands.Command;
+import chatbot.commands.util.Command;
 import chatbot.commands.images.Megumin;
 import chatbot.commands.images.Sans;
 import chatbot.commands.images.ZeroTwo;
 import chatbot.commands.moderation.Ban;
 import chatbot.commands.moderation.Kick;
 import chatbot.commands.moderation.Remove;
-import chatbot.commands.notgoingtobeinthegithub.CBT;
-import chatbot.commands.notgoingtobeinthegithub.Crusade; 
+import chatbot.commands.moderation.Shutdown;
 
 public class Main {
 
