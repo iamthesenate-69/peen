@@ -1,8 +1,10 @@
-package chatbot.commands;
+package chatbot.commands.images;
 
+import chatbot.commands.util.Command;
+import chatbot.commands.util.Functions;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class Megumin extends Execute {
+public class Megumin extends Command {
   
 	@Override
 	public void execute(MessageReceivedEvent e, String[] args) {
