@@ -23,5 +23,4 @@ public class Sans extends Command {
 		Functions.setCooldown(e, 2000);
 	}
 
-	
 }
