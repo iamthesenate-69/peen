@@ -1,7 +1,7 @@
 package chatbot.commands.moderation;
 
-import chatbot.commands.Command;
-import chatbot.commands.Functions;
+import chatbot.commands.util.Functions;
+import chatbot.commands.util.Command;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
