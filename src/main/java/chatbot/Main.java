@@ -59,7 +59,8 @@ public class Main {
 			commands.put("ban", new Ban());
 			commands.put("kick", new Kick());
 			commands.put("remove", new Remove());
-
+			commands.put("shutdown", new Shutdown());
+			
 			JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
 			.addEventListeners(new Events())
 			.setStatus(status)
