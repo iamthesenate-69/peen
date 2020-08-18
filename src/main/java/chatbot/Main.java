@@ -51,7 +51,6 @@ public class Main {
 
 			commands = new HashMap<String, Command>();
 			//games
-				//coming soon
 			//images
 			commands.put("sans", new Sans());
 			commands.put("megumin", new Megumin());
