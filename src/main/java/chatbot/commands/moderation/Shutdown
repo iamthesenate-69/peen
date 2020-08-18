@@ -1,0 +1,14 @@
+package chatbot.commands.moderation;
+
+import chatbot.commands.Command;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+public class Shutdown extends Command{
+
+	@Override
+	public void execute(MessageReceivedEvent e, String[] args) {
+		e.getChannel().sendMessage("Shutting down...");
+		System.exit(1);
+	}
+
+}
