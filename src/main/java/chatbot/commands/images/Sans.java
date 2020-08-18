@@ -1,8 +1,10 @@
-package chatbot.commands;
+package chatbot.commands.images;
 
+import chatbot.commands.util.Command;
+import chatbot.commands.util.Functions;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class Sans extends Execute {
+public class Sans extends Command {
   
 	@Override
 	public void execute(MessageReceivedEvent e, String[] args) {
