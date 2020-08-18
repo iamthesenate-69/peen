@@ -7,29 +7,43 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class Events extends ListenerAdapter{
 
 	public void onMessageReceived(MessageReceivedEvent event) {
-		Message msg = event.getMessage();
-
-		if (msg.getAuthor().isBot() || !msg.getContentRaw().startsWith(Main.prefix)) 
+		User user = event.getMessage().getAuthor();
+		String msg = event.getMessage().getContentRaw();
+		
+		if (user.isBot() || !msg.startsWith(Main.prefix)) 
 			return;
 
 		//Alright stop, this is too much, this is a complete clusterfuck, how did this get so out of control
 		//Andrej Karpathy: i literally have no idea 
 
-		String command = msg.getContentRaw().split(" ")[0].substring(Main.prefix.length());
+		String command = msg.split(" ")[0].substring(Main.prefix.length());
+
+		updateCooldown(user);
 		
-		if (Main.commands.containsKey(command) && OnCooldown(msg.getMember()) <= 0) 
-			Main.commands.get(command).execute(event, msg.getContentRaw().split(" "));
+		if (Main.commands.containsKey(command) && hasNoCooldown(user))
+			Main.commands.get(command).execute(event, msg.split(" "));
 
 
 
 	}
-
-	public int OnCooldown(Member m) {
-		for (int i = 0; i < Main.Bot.Timer.size(); i++) 
-			if (Main.Bot.Timer.get(i).hasMember(m))
-				return Main.Bot.Timer.get(i).t;
-
-		return 0;
+	
+	//removes from Timer when t - current time is negative
+	public void updateCooldown(User u) {
+		for (int i = 0; i < Main.Bot.cooldown.size(); i++) 
+			if (Main.Bot.cooldown.get(i).hasUser(u) && Main.Bot.cooldown.get(i).t - System.currentTimeMillis() <= 0) 
+				Main.Bot.cooldown.remove(i);
+			
+		
+	}
+	
+	//false if member is contained in Timer
+	//true otherwise
+	public boolean hasNoCooldown(User u) {
+		for (int i = 0; i < Main.Bot.cooldown.size(); i++) 
+			if (Main.Bot.cooldown.get(i).hasUser(u))
+				return false;
+		
+		return true;
 	}
 
 }
