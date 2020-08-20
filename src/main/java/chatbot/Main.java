@@ -21,7 +21,6 @@ import chatbot.commands.moderation.Ban;
 import chatbot.commands.moderation.Kick;
 import chatbot.commands.moderation.Remove;
 import chatbot.commands.moderation.Shutdown;
-import chatbot.commands.notgoingtobeinthegithub.CBT;
 import chatbot.commands.games.Minesweeper;
 
 public class Main {
