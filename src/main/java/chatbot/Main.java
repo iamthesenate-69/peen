@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import chatbot.commands.util.Command;
+import chatbot.commands.games.Minesweeper.MinesweeperData;
 import chatbot.commands.images.Megumin;
 import chatbot.commands.images.Sans;
 import chatbot.commands.images.ZeroTwo;
@@ -20,13 +21,15 @@ import chatbot.commands.moderation.Ban;
 import chatbot.commands.moderation.Kick;
 import chatbot.commands.moderation.Remove;
 import chatbot.commands.moderation.Shutdown;
+import chatbot.commands.notgoingtobeinthegithub.CBT;
+import chatbot.commands.games.Minesweeper;
 
 public class Main {
 
 	public static void main(String[] args) {
 		//token, activity, onlinestatus, bot prefix
 		try {
-			new Bot("Your Token here", Activity.watching("Activity"), OnlineStatus.DO_NOT_DISTURB, "~");
+			new Bot("Your Token Here", Activity.watching("activity"), OnlineStatus.DO_NOT_DISTURB, "~");
 		} catch(LoginException e) {
 			System.out.println("Provide a valid token!");
 			System.exit(1);
@@ -40,6 +43,10 @@ public class Main {
 
 		//spam prevention
 		public static ArrayList<Limiter> cooldown = new ArrayList<Limiter>();
+		
+		//minesweeper
+		public static ArrayList<MinesweeperData> Minesweeper = new ArrayList<MinesweeperData>();
+		
 
 		Bot(String token, Activity activity, OnlineStatus status, String _prefix) throws LoginException{
 
@@ -50,6 +57,7 @@ public class Main {
 
 			commands = new HashMap<String, Command>();
 			//games
+			commands.put("ms", new Minesweeper());
 			//images
 			commands.put("sans", new Sans());
 			commands.put("megumin", new Megumin());
