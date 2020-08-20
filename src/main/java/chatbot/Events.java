@@ -12,16 +12,18 @@ public class Events extends ListenerAdapter{
 		
 		if (user.isBot() || !msg.startsWith(Main.prefix)) 
 			return;
-
+		
+		
+		
 		//Alright stop, this is too much, this is a complete clusterfuck, how did this get so out of control
 		//Andrej Karpathy: i literally have no idea 
 
-		String command = msg.split(" ")[0].substring(Main.prefix.length());
+		String command = msg.split("( +)")[0].substring(Main.prefix.length());
 
 		updateCooldown(user);
 		
 		if (Main.commands.containsKey(command) && hasNoCooldown(user))
-			Main.commands.get(command).execute(event, msg.split(" "));
+			Main.commands.get(command).execute(event, msg.split("( +)"));
 
 
 
