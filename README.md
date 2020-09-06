@@ -3,6 +3,8 @@ discord bot
 
 yes
 
+good format this is
+
 replace "Your Token Here" in Main.java with your bot token
 
 
@@ -39,3 +41,22 @@ shutdown
 help
 
 use the help command for more info
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
