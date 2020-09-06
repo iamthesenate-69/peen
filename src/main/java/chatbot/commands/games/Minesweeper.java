@@ -5,6 +5,7 @@ import java.util.Random;
 
 import chatbot.Main.Bot;
 import chatbot.commands.util.Command;
+import chatbot.commands.util.Functions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -13,75 +14,92 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class Minesweeper extends Command{
 
 	@Override
+	public String name() {
+		return "ms";
+	}
+
+	@Override
+	public String description() {
+		return "minesweeper game in discord";
+	}
+
+	@Override
+	public String usage() {
+		String p = Bot.prefix + "" + this.name();
+		return p+" play <difficulty (0-2 OR easy, medium, hard)> <starting position x> <starting position y>\n" +
+		p+" <dig/flag> <pos x> <pos y>\n" +
+		p+" quit";
+	}
+
+	@Override
 	public void execute(MessageReceivedEvent e, String[] args) {
 		User u = e.getAuthor();
 		MessageChannel c = e.getChannel();
 
-		try {
-			if (args[1].equals("play") || args[1].equals("p")) {
-				if (getIndex(e.getAuthor()) == -1) {
-					
-					Bot.Minesweeper.add(new MinesweeperData(createGrid(args[2], args[4], args[3]), u));
-					
-					dig(args[4], args[3], e);
-					c.sendMessage("Started new Minesweeper game").queue();
-				}else
-					c.sendMessage("You are already in a game").queue();
-			}
 
-			else if (args[1].equals("quit") || args[1].equals("q")) {
-				if (getIndex(e.getAuthor()) != -1) {
-					Bot.Minesweeper.remove(getIndex(e.getAuthor()));
-					c.sendMessage("Quitted Minesweeper game").queue();
-				}else
-					c.sendMessage("You are not in a game").queue();
-			}
+		if (args[1].equals("play") || args[1].equals("p")) {
+			if (getIndex(e.getAuthor()) == -1) {
 
-			else if (args[1].equals("dig") || args[1].equals("d")) {
-				if (getIndex(e.getAuthor()) != -1) 
-					dig(args[3], args[2], e);
-				else
-					c.sendMessage("You are not in a game").queue();
-			}
+				Bot.minesweeperData.add(new MinesweeperData(createGrid(args[2], args[4], args[3]), u));
 
-			else if (args[1].equals("flag") || args[1].equals("f")) {
-				if (getIndex(e.getAuthor()) != -1) 
-					flag(args[3], args[2], e);
-				else
-					c.sendMessage("You are not in a game").queue();
-			}
-
+				dig(args[4], args[3], e);
+				c.sendMessage("Started new Minesweeper game").queue();
+			}else
+				c.sendMessage("You are already in a game").queue();
 		}
-		catch (Exception ex) {
-			c.sendMessage("Enter a Valid Command").queue();
+
+		else if (args[1].equals("quit") || args[1].equals("q")) {
+			if (getIndex(e.getAuthor()) != -1) {
+				Bot.minesweeperData.remove(getIndex(e.getAuthor()));
+				c.sendMessage("Quitted Minesweeper game").queue();
+			}else
+				c.sendMessage("You are not in a game").queue();
 		}
+
+		else if (args[1].equals("dig") || args[1].equals("d")) {
+			if (getIndex(e.getAuthor()) != -1) 
+				dig(args[3], args[2], e);
+			else
+				c.sendMessage("You are not in a game").queue();
+		}
+
+		else if (args[1].equals("flag") || args[1].equals("f")) {
+			if (getIndex(e.getAuthor()) != -1) 
+				flag(args[3], args[2], e);
+			else
+				c.sendMessage("You are not in a game").queue();
+		}else 
+			Functions.printError(e, this);
+		
 
 	}
-	
-	
+
+
+
+
 
 	void flag(String string, String string2, MessageReceivedEvent e) {
 		int x = Integer.parseInt(string);
 		int y = Integer.parseInt(string2);
-		
+
 		int index = getIndex(e.getAuthor());
 
-		char[][] frontend = Bot.Minesweeper.get(index).frontend;
+		char[][] frontend = Bot.minesweeperData.get(index).frontend;
 
 		if (frontend[x][y] != '.') {
 			print(e, frontend, "You can only flag undug tiles");
 		}
-		
+
 		if (frontend[x][y] == '.') {
 			frontend[x][y] = 'F';
 			print(e, frontend, "Flagged (" + y + ", " + x + ")");
 		}else if (frontend[x][y] == 'F') {
-			frontend[x][y] = convert(Bot.Minesweeper.get(index).grid[x][y]);
+			frontend[x][y] = convert(Bot.minesweeperData.get(index).grid[x][y]);
 			print(e, frontend, "Unflagged (" + y + ", " + x + ")");
 		}
 	}
-	
-	
+
+
 
 	void dig(String X, String Y, MessageReceivedEvent e) {
 		int startX = Integer.parseInt(X);
@@ -89,43 +107,43 @@ public class Minesweeper extends Command{
 
 		int index = getIndex(e.getAuthor());
 
-		int[][] grid = Bot.Minesweeper.get(index).grid;
-		char[][] frontend = Bot.Minesweeper.get(index).frontend;
-		
-		
+		int[][] grid = Bot.minesweeperData.get(index).grid;
+		char[][] frontend = Bot.minesweeperData.get(index).frontend;
+
+
 		//update tile if not flagged
 		if (frontend[startX][startY] == 'F') {
 			print(e, frontend, "Tile is flagged");
 			return;
 		}
-		
+
 		frontend[startX][startY] = convert(grid[startX][startY]);
-		
+
 		if (frontend[startX][startY] == '*') {
 			endScreen(e, grid, frontend);
-			Bot.Minesweeper.remove(index);
+			Bot.minesweeperData.remove(index);
 			return;
 		}
 
 		else if (grid[startX][startY] > 0) {
 			frontend[startX][startY] = convert(grid[startX][startY]);
-			Bot.Minesweeper.get(index).update(frontend);
+			Bot.minesweeperData.get(index).update(frontend);
 			print(e, frontend, "Dug (" + startY + ", " + startX + ")");
 		}
-		
+
 		else 
 			print(e, bfs(startX, startY, grid, frontend, index), "Dug (" + startY + ", " + startX + ")");
-		
-		
+
+
 		//check win
 		if (checkWin(grid, frontend)) {
 			e.getChannel().sendMessage(new EmbedBuilder().setImage("https://images7.alphacoders.com/658/658706.jpg").setTitle("You win").build()).queue();
-			Bot.Minesweeper.remove(index);
+			Bot.minesweeperData.remove(index);
 		}
-		
+
 	}
-	
-	
+
+
 
 	boolean checkWin(int[][] grid, char[][] frontend) {
 		for (int i = 0; i < grid.length; i++) {
@@ -136,13 +154,13 @@ public class Minesweeper extends Command{
 			}
 		}
 		return true;
-		
+
 	}
 
 
 
 	void endScreen(MessageReceivedEvent e, int[][] grid, char[][] frontend) {
-		
+
 		//reveal bombs
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid.length; j++) {
@@ -151,9 +169,9 @@ public class Minesweeper extends Command{
 				}
 			}
 		}
-		
+
 		print(e, frontend, "You died");
-		
+
 	}
 
 
@@ -181,7 +199,7 @@ public class Minesweeper extends Command{
 				}
 			}
 		}
-		Bot.Minesweeper.get(index).update(frontend);
+		Bot.minesweeperData.get(index).update(frontend);
 		return frontend;
 	}
 
@@ -195,11 +213,11 @@ public class Minesweeper extends Command{
 
 		return (char)(i+'0');
 	}
-	
-	
+
+
 
 	void print(MessageReceivedEvent e, char[][] grid, String message) {
-		
+
 		String S = "   ";
 
 		for (int i = 0; i < grid.length; i++) {
@@ -222,7 +240,7 @@ public class Minesweeper extends Command{
 		e.getChannel().sendMessage(new EmbedBuilder().setDescription("```"+S+"```").setTitle(message).build()).queue();
 
 	}
-	
+
 	int[][] createGrid(String size, String X, String Y) {
 		int n = 24;
 		int b = 99;
@@ -234,10 +252,10 @@ public class Minesweeper extends Command{
 			n = 16;
 			b = 40;
 		}
-		
+
 		int startX = Integer.parseInt(X);
 		int startY = Integer.parseInt(Y);
-		
+
 		//check bounds
 		if (startX < 0 || startX >= n || startY < 0 || startY >= n)
 			throw new NumberFormatException();
@@ -247,11 +265,11 @@ public class Minesweeper extends Command{
 
 		//numbers
 		grid = addNumbers(grid);
-		
+
 		return grid;
 	}
-	
-	
+
+
 
 	int[][] placeMines(int n, int b, int startX, int startY) {
 		int[][] grid = new int[n][n];
@@ -260,7 +278,7 @@ public class Minesweeper extends Command{
 		while(c < b) {
 			int x = r.nextInt(n);
 			int y = r.nextInt(n);
-			
+
 			if (grid[x][y] == 0 && isEmptyNearby(startX, startY, x, y)) {
 				grid[x][y] = -1;
 				c++;
@@ -278,8 +296,8 @@ public class Minesweeper extends Command{
 					return false;
 		return true;
 	}
-	
-	
+
+
 
 	int[][] addNumbers(int[][] grid) {
 		for (int i = 0; i < grid.length; i++) 
@@ -288,8 +306,8 @@ public class Minesweeper extends Command{
 					grid[i][j] = getAdjMines(i, j, grid);
 		return grid;
 	}
-	
-	
+
+
 
 	int getAdjMines(int x, int y, int[][] grid) {
 		int mines = 0;
@@ -303,15 +321,15 @@ public class Minesweeper extends Command{
 
 
 	int getIndex(User user) {
-		for (int i = 0; i < Bot.Minesweeper.size(); i++) {
-			if (Bot.Minesweeper.get(i).containUser(user)) {
+		for (int i = 0; i < Bot.minesweeperData.size(); i++) {
+			if (Bot.minesweeperData.get(i).containUser(user)) {
 				return i;
 			}
 		}
 		return -1;
 	}
-	
-	
+
+
 
 	public class MinesweeperData {
 		int[][] grid;
@@ -343,5 +361,11 @@ public class Minesweeper extends Command{
 			frontend = newfrontend;
 		}
 	}
+
+
+
+
+
+
 
 }
