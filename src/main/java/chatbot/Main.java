@@ -23,7 +23,7 @@ public class Main {
 	public static void main(String[] args) {
 		//token, activity, onlinestatus, bot prefix
 		try {
-			new Bot("NzMwMTA3MTc5MzUyMTk1MTM0.XwSrTA._GxwEYJiHuTBkmNVh2mD8T7gH08", Activity.streaming("re:zero tuesdays", "https://www.youtube.com/watch?v=hB8S6oKjiw8"), OnlineStatus.DO_NOT_DISTURB, "~");
+			new Bot("Your token here", Activity.playing("activity")), OnlineStatus.DO_NOT_DISTURB, "~");
 		} catch(LoginException e) {
 			System.out.println("Provide a valid token!");
 			System.exit(1);
