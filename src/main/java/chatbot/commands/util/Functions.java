@@ -36,4 +36,8 @@ public class Functions {
 		}
 		return false;
 	}
+	
+	public static void printError(MessageReceivedEvent e, Command c) {
+		e.getChannel().sendMessage("Usage:\n"+c.usage()).queue();
+	}
 }

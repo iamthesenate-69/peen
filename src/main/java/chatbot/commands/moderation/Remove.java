@@ -3,12 +3,30 @@ package chatbot.commands.moderation;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import chatbot.Main.Bot;
 import chatbot.commands.util.Command;
 import chatbot.commands.util.Functions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Remove extends Command {
+	
+	@Override
+	public String name() {
+		return "remove";
+	}
+
+	@Override
+	public String description() {
+		return "removes/revokes webhooks and roles from a member";
+	}
+
+	@Override
+	public String usage() {
+		String p = Bot.prefix + this.name();
+		return p + " roles <mention>\n" +
+					" webhooks";
+	}
   
 	@Override
 	public void execute(MessageReceivedEvent e, String[] args) {
@@ -20,6 +38,8 @@ public class Remove extends Command {
 			removeRole(e);
 		else if (args[1].equals("webhooks") || args[1].equals("webhook") || args[1].equals("w"))
 			removeWebhooks(e);
+		else
+			Functions.printError(e, this);
 	}
 
 	void removeWebhooks(MessageReceivedEvent e) {

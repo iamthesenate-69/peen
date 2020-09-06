@@ -1,5 +1,7 @@
 package chatbot;
 
+import chatbot.Main.Bot;
+import chatbot.commands.util.Functions;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -10,23 +12,22 @@ public class Events extends ListenerAdapter{
 		User user = event.getMessage().getAuthor();
 		String msg = event.getMessage().getContentRaw();
 		
-		if (user.isBot() || !msg.startsWith(Main.prefix)) 
+		if (user.isBot() || !msg.startsWith(Bot.prefix)) 
 			return;
-		
-		
 		
 		//Alright stop, this is too much, this is a complete clusterfuck, how did this get so out of control
 		//Andrej Karpathy: i literally have no idea 
 
-		String command = msg.split("( +)")[0].substring(Main.prefix.length());
+		String command = msg.split("( +)")[0].substring(Bot.prefix.length());
 
 		updateCooldown(user);
 		
-		if (Main.commands.containsKey(command) && hasNoCooldown(user))
-			Main.commands.get(command).execute(event, msg.split("( +)"));
-
-
-
+		try {
+			if (Main.commands.containsKey(command) && hasNoCooldown(user))
+				Main.commands.get(command).execute(event, msg.split("( +)"));
+		} catch(Exception e) {
+			Functions.printError(event, Main.commands.get(command));
+		}
 	}
 	
 	//removes from Timer when t - current time is negative

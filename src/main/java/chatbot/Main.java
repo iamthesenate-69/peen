@@ -12,23 +12,18 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import chatbot.commands.util.Command;
+import chatbot.commands.util.*;
 import chatbot.commands.games.Minesweeper.MinesweeperData;
-import chatbot.commands.images.Megumin;
-import chatbot.commands.images.Sans;
-import chatbot.commands.images.ZeroTwo;
-import chatbot.commands.moderation.Ban;
-import chatbot.commands.moderation.Kick;
-import chatbot.commands.moderation.Remove;
-import chatbot.commands.moderation.Shutdown;
-import chatbot.commands.games.Minesweeper;
+import chatbot.commands.images.*;
+import chatbot.commands.moderation.*;
+import chatbot.commands.games.*;
 
 public class Main {
 
 	public static void main(String[] args) {
 		//token, activity, onlinestatus, bot prefix
 		try {
-			new Bot("Your Token Here", Activity.watching("activity"), OnlineStatus.DO_NOT_DISTURB, "~");
+			new Bot("NzMwMTA3MTc5MzUyMTk1MTM0.XwSrTA._GxwEYJiHuTBkmNVh2mD8T7gH08", Activity.streaming("re:zero tuesdays", "https://www.youtube.com/watch?v=hB8S6oKjiw8"), OnlineStatus.DO_NOT_DISTURB, "~");
 		} catch(LoginException e) {
 			System.out.println("Provide a valid token!");
 			System.exit(1);
@@ -36,15 +31,16 @@ public class Main {
 	}
 
 	public static HashMap<String, Command> commands;
-	public static String prefix;
-
+	
 	public static class Bot {
+		
+		public static String prefix;
 
 		//spam prevention
 		public static ArrayList<Limiter> cooldown = new ArrayList<Limiter>();
 		
 		//minesweeper
-		public static ArrayList<MinesweeperData> Minesweeper = new ArrayList<MinesweeperData>();
+		public static ArrayList<MinesweeperData> minesweeperData = new ArrayList<MinesweeperData>();
 		
 
 		Bot(String token, Activity activity, OnlineStatus status, String _prefix) throws LoginException{
@@ -56,22 +52,27 @@ public class Main {
 
 			commands = new HashMap<String, Command>();
 			//games
-			commands.put("ms", new Minesweeper());
+			add(new Minesweeper());
 			//images
-			commands.put("sans", new Sans());
-			commands.put("megumin", new Megumin());
-			commands.put("zerotwo", new ZeroTwo());
+			add(new Sans());
+			add(new Megumin());
+			add(new ZeroTwo());
 			//moderation
-			commands.put("ban", new Ban());
-			commands.put("kick", new Kick());
-			commands.put("remove", new Remove());
-			commands.put("shutdown", new Shutdown());
+			add(new Ban());
+			add(new Kick());
+			add(new Remove());
+			add(new Shutdown());
+			add(new Help());
 			
 			JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
 			.addEventListeners(new Events())
 			.setStatus(status)
 			.setActivity(activity)
 			.build();
+		}
+		
+		void add(Command c) {
+			commands.put(c.name(), c);
 		}
 
 
